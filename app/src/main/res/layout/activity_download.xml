@@ -1,0 +1,32 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/artistEditText"
+        android:hint="Artist" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="http://www.free-map.org.uk/course/mad/ws/hits.php"
+        android:id="@+id/urlEditText"
+        android:layout_gravity="center_horizontal" />
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/btn1" android:text="@string/Search"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/displaySongText"
+        android:layout_weight="0.10"
+        android:text="Songs Displayed" />
+
+</LinearLayout>
+
+
