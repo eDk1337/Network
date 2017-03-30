@@ -7,13 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.os.AsyncTask;
 import android.widget.TextView;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import android.app.AlertDialog;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class DownloadActivity extends Activity implements View.OnClickListener{
 
@@ -27,16 +30,31 @@ public class DownloadActivity extends Activity implements View.OnClickListener{
             HttpURLConnection conn = null;
             try
             {
-                URL urlObj = new URL(url + "?artist=" + artist);
+                URL urlObj = new URL(url + "?artist=" +artist +"&format=json");
                 conn = (HttpURLConnection) urlObj.openConnection();
                 InputStream in = conn.getInputStream();
-                if(conn.getResponseCode() == 200)
-                {
+                if(conn.getResponseCode() == 200) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(in));
                     String result = "", line;
-                    while((line = br.readLine()) !=null)
+                    while ((line = br.readLine()) != null)
                         result += line;
-                    return result;
+
+
+                    JSONArray jsonArray = new JSONArray(result);
+                    String output = "";
+                    for (int i=0; i<jsonArray.length(); i++) {
+                        JSONObject songObj = jsonArray.getJSONObject(i);
+                        String songTitle = songObj.getString("song");
+                        String artistName = songObj.getString("artist");
+                        String year = songObj.getString("year");
+
+                        String pretty = "Song Title: " + songTitle;
+                        pretty += ", Artist: " + artistName;
+                        pretty += ", Year: " + year;
+
+                        output += pretty;
+                    }
+                    return output;
                 }
                 else
                     return "HTTP ERROR: " + conn.getResponseCode();
@@ -46,12 +64,15 @@ public class DownloadActivity extends Activity implements View.OnClickListener{
             catch(IOException e)
             {
                 return e.toString();
-            }
-            finally
+            } catch (JSONException e) {
+                return e.toString();
+
+            } finally
             {
                 if(conn!=null)
                     conn.disconnect();
             }
+
         }
         @Override
         public void onPostExecute(String result)
